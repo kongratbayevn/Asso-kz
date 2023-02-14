@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/asso-kz
+    username: postgres
+    password: postgres
+
+    driverClassName: org.postgresql.Driver
+    platform: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
