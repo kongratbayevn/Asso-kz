@@ -6,7 +6,6 @@ import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import java.util.*
 
-
 internal class AuditorAwareImpl: AuditorAware<String?> {
     override fun getCurrentAuditor(): Optional<String?> {
         return Optional.ofNullable(SecurityContextHolder.getContext())
