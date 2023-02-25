@@ -23,3 +23,8 @@ jwt:
   secret: w9z$C&F)J@NcRfUjWnZr4u7x!A%D*G-K #This Secret For JWT HS256 Signature Algorithm MUST Have 256 bits KeySize
   expiration: 28800 # token expiration in seconds
 
+sms:
+  user:
+    url: "http://kazinfoteh.org:9507/api"
+    login: 'mangistautaxi1'
+    password: 'Ojd9Lenml'

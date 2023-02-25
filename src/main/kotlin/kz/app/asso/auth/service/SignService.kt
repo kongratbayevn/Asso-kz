@@ -4,6 +4,8 @@ import kz.app.asso.auth.dto.UserDto
 import kz.app.asso.auth.model.User
 import kz.app.asso.auth.model.payload.UserRequest
 import kz.app.asso.auth.repository.UserRepository
+import kz.app.asso.sms.dto.SmsRequest
+import kz.app.asso.sms.service.SmsService
 import kz.app.asso.system.dto.Status
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -21,10 +23,7 @@ class SignService {
     lateinit var userService: UserService
 
     @Autowired
-    lateinit var userRepository: UserRepository
-
-    @Autowired
-    lateinit var passwordEncoder: PasswordEncoder
+    lateinit var smsService: SmsService
 
     @Value("\${spring.profiles.active}")
     val statusApp: String? = null
@@ -36,20 +35,16 @@ class SignService {
 
         if (statusApp == "production") {
             try {
-//                val smsBody = SmsRequestDto()
-//                smsBody.messageData = "Tez Taxi. Никому не сообщайте! Код подтверждения: ${status.message}"
-//                smsBody.recipient = user.phone.replace("+", "")
-//
-//                val resultSms = smsClient.sendSms(smsBody)
-//                if (resultSms == null || resultSms.statusCode != "0") {
-//                    status.status = 0
-//                    status.message = "Something went wrong please try again!"
-//                    status.value = null
-//                    return status
-//                }
-//
-//                status.message = status.value.toString()
-//                status.value = resultSms
+                status.flatMap { sts ->
+                    val smsBody = SmsRequest()
+                    smsBody.messageData = "ASSO-KZ. Никому не сообщайте! Код подтверждения: ${sts.message}"
+                    smsBody.recipient = userDto.phone.replace("+", "")
+
+                    smsService.send(smsBody).map { resultSms ->
+                        sts.message = sts.value.toString()
+                        sts.value = resultSms
+                    }
+                }
             } catch (e: Exception) {
                 status.map {
                     it.status = 0
