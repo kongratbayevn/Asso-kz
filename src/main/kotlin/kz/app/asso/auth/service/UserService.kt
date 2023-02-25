@@ -1,10 +1,8 @@
 package kz.app.asso.auth.service
 
-import kz.app.asso.auth.dto.UserDto
 import kz.app.asso.auth.model.User
 import kz.app.asso.auth.model.payload.UserRequest
 import kz.app.asso.auth.repository.UserRepository
-import kz.app.asso.auth.service.security.SecurityService
 import kz.app.asso.system.dto.Status
 import kz.app.asso.system.exceptionHandler.ApiException
 import kz.app.asso.system.exceptionHandler.UserNotFoundException
@@ -16,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.sql.Timestamp
-import java.util.UUID
+import java.util.*
 
 @Slf4j
 @Service
@@ -38,7 +36,7 @@ class UserService {
 
     fun createOrUpdateUser(userRequest: UserRequest, randomCode: String): Mono<User> {
         val user = userRequest.getUser()
-        user.id = UUID.randomUUID()
+//        user.id = UUID.randomUUID()
         user.code = passwordEncoder.encode(randomCode)
         // 900000 -> 15 minutes;    600000 -> 10 minutes;   300000 -> 5 minutes
         user.expiredCode = Timestamp(System.currentTimeMillis() + 300000)
